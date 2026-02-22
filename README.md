@@ -57,14 +57,20 @@ flutter devices
 flutter run -d <device-id>
 ```
 
-### Android Note
-The project's `gradle.properties` includes:
-```
-org.gradle.java.home=/Applications/Android Studio 3.app/Contents/jbr/Contents/Home
-```
-This is required because multiple Android Studio installations are present on the machine.
+[//]: # (### Android Note)
 
----
+[//]: # (The project's `gradle.properties` includes:)
+
+[//]: # (```)
+
+[//]: # (org.gradle.java.home=/Applications/Android Studio 3.app/Contents/jbr/Contents/Home)
+
+[//]: # (```)
+
+[//]: # (This is required because multiple Android Studio installations are present on the machine.)
+
+[//]: # ()
+[//]: # (---)
 
 ## ✅ Run Tests
 ```bash
