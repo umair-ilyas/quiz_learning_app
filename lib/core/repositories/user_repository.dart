@@ -14,6 +14,23 @@ class UserRepository {
     return AppUser.dummy().copyWith(score: score, quizzesTaken: quizzesTaken);
   }
 
+  /// Adds [delta] points on top of the current total.
+  Future<void> addScore(int delta) async {
+    if (delta <= 0) return;
+    final current = _prefs.getInt(AppConstants.prefUserScore) ?? 0;
+    await _prefs.setInt(AppConstants.prefUserScore, current + delta);
+  }
+
+  /// Overwrites the stored total score with an absolute value.
+  Future<void> setUserScore(int total) async {
+    await _prefs.setInt(AppConstants.prefUserScore, total);
+  }
+
+  /// Sets the number of unique categories completed (not total plays).
+  Future<void> setQuizzesTaken(int count) async {
+    await _prefs.setInt(AppConstants.prefQuizzesTaken, count);
+  }
+
   Future<void> updateUserStats({
     required int additionalScore,
     bool incrementQuizzesTaken = true,

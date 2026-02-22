@@ -22,6 +22,7 @@ class HomeController extends GetxController {
     required int categoryIndex,
     required int questionsAttempted,
     required int questionsAnsweredCorrectly,
+    required int bestScore,
   }) {
     if (categoryIndex < 0 || categoryIndex >= categories.length) return;
 
@@ -37,6 +38,7 @@ class HomeController extends GetxController {
       categoryIndex: categoryIndex,
       questionsAttempted: questionsAttempted,
       questionsAnsweredCorrectly: questionsAnsweredCorrectly,
+      bestScore: bestScore,
     );
   }
 }

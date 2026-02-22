@@ -27,16 +27,18 @@ class UserController extends GetxController {
     }
   }
 
-  Future<void> addScore(int points) async {
-    await _userRepository.updateUserStats(additionalScore: points);
-    user.value = user.value.copyWith(score: user.value.score + points);
+  /// Adds [delta] points to the user's score (only call with a positive improvement delta).
+  Future<void> addScore(int delta) async {
+    if (delta <= 0) return;
+    await _userRepository.addScore(delta);
+    user.value = user.value.copyWith(score: user.value.score + delta);
   }
 
-  Future<void> incrementQuizzesTaken() async {
-    await _userRepository.updateUserStats(
-      additionalScore: 0,
-      incrementQuizzesTaken: true,
-    );
-    user.value = user.value.copyWith(quizzesTaken: user.value.quizzesTaken + 1);
+  /// Syncs quizzesTaken to the number of unique categories completed.
+  /// This replaces the old incrementQuizzesTaken() so replaying the same quiz
+  /// does not inflate the count.
+  Future<void> syncQuizzesTaken(int completedCount) async {
+    await _userRepository.setQuizzesTaken(completedCount);
+    user.value = user.value.copyWith(quizzesTaken: completedCount);
   }
 }

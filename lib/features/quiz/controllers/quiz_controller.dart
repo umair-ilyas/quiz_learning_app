@@ -145,17 +145,32 @@ class QuizController extends GetxController {
       timeTakenSeconds: 0,
     );
 
-    // Update user and category progress
     final userController = Get.find<UserController>();
     final homeController = Get.find<HomeController>();
 
-    userController.addScore(result.scoreEarned);
-    userController.incrementQuizzesTaken();
+    // --- Score: only add the improvement over the previous best attempt ---
+    final previousBest = _quizRepository.getCategoryBestScore(categoryIndex);
+    final scoreDelta = result.scoreEarned - previousBest;
+
+    // Always save category progress (overwrites with latest attempt + best score).
+    // Use max(previousBest, current) so best score never goes backward.
+    final newBest = result.scoreEarned > previousBest
+        ? result.scoreEarned
+        : previousBest;
+
     homeController.updateCategoryProgress(
       categoryIndex: categoryIndex,
       questionsAttempted: totalQuestions,
       questionsAnsweredCorrectly: correctCount.value,
+      bestScore: newBest,
     );
+
+    // Add to total score only if this attempt beat the previous best.
+    userController.addScore(scoreDelta);
+
+    // --- quizzesTaken: count distinct categories completed, not total plays ---
+    final completedCount = _quizRepository.countCompletedCategories();
+    userController.syncQuizzesTaken(completedCount);
 
     // Navigate to result
     appRouter.go('/result', extra: result);
