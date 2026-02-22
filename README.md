@@ -35,8 +35,13 @@ test/
 ## 🚀 How to Run
 
 ### Prerequisites
-- Flutter SDK ≥ 3.8.1
-- Dart SDK ≥ 3.8.1
+- Flutter SDK ≥ 3.8.1 (Dart SDK ≥ 3.8.1)
+
+### Verify Your Flutter Version
+```bash
+flutter --version
+# Expected: Flutter 3.32.8 or later, Dart 3.8.1 or later
+```
 
 ### Install Dependencies
 ```bash
@@ -57,23 +62,71 @@ flutter devices
 flutter run -d <device-id>
 ```
 
-[//]: # (### Android Note)
-
-[//]: # (The project's `gradle.properties` includes:)
-
-[//]: # (```)
-
-[//]: # (org.gradle.java.home=/Applications/Android Studio 3.app/Contents/jbr/Contents/Home)
-
-[//]: # (```)
-
-[//]: # (This is required because multiple Android Studio installations are present on the machine.)
-
-[//]: # ()
-[//]: # (---)
+---
 
 ## ✅ Run Tests
+
 ```bash
+flutter test
+```
+
+> **Note:** If you have **multiple Flutter SDKs** installed, `flutter test` may fail or use the wrong SDK.  
+> Follow the troubleshooting section below to fix this.
+
+---
+
+## 🛠️ Troubleshooting: Multiple Flutter SDKs
+
+If you have more than one Flutter SDK installed (e.g. in `~/Downloads/flutter3.7.4`, `~/Downloads/flutter3.32.8`, etc.), your terminal may be pointing to the wrong one.
+
+### Option 1 — Use the full SDK path directly (quick fix)
+
+```bash
+/Users/umair/Downloads/flutter3.32.8/bin/flutter test
+```
+
+Replace the path with wherever your Flutter 3.32.8 SDK is installed.
+
+### Option 2 — Fix your shell PATH permanently (recommended)
+
+**Step 1:** Open your shell config file:
+```bash
+# For zsh (default on macOS)
+open ~/.zshrc
+
+# For bash
+open ~/.bash_profile
+```
+
+**Step 2:** Add or update the Flutter PATH entry:
+```bash
+# Flutter SDK
+export FLUTTER_HOME="/Users/umair/Downloads/flutter3.32.8"
+export PATH="$FLUTTER_HOME/bin:$PATH"
+```
+
+> Make sure this is the **only** Flutter `export PATH` entry. Remove or comment out any others.
+
+**Step 3:** Reload your shell config:
+```bash
+source ~/.zshrc
+# or
+source ~/.bash_profile
+```
+
+**Step 4:** Verify the correct SDK is active:
+```bash
+which flutter
+# Expected: /Users/umair/Downloads/flutter3.32.8/bin/flutter
+
+flutter --version
+# Expected: Flutter 3.32.8, Dart 3.8.1
+```
+
+**Step 5:** Run pub get and tests from the project root:
+```bash
+cd /Users/umair/StudioProjects/ilid/quiz_learning_app
+flutter pub get
 flutter test
 ```
 
